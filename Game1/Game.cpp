@@ -78,6 +78,34 @@ void game_hard(Ball *ball, Player *player, bool *playing, bool *title, int *mode
 	*title = false;
 }
 
+// Restart game when default mode is chosen:
+
+void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width])
+{
+	if (key[KEY_LEFT])
+		key[KEY_LEFT] = false;
+
+	if (key[KEY_RIGHT])
+		key[KEY_RIGHT] = false;
+
+	*playing = true;
+	player->set_life(def_life);
+	player->set_score(0);
+	ball->set_dx(def_dx_dy);
+	ball->set_dy(def_dx_dy);
+	ball->set_x(SCREEN_W / 2 - ballw / 2);
+	ball->set_y(SCREEN_H / 2 - ballh);
+	player->set_x(SCREEN_W / 2 - playerw / 2);
+	player->set_y(SCREEN_H - playerh);
+	for (int i = 0; i < size_brick_height; i++) {
+		for (int j = 0; j < size_brick_width; j++)
+		{
+			brick[i][j].set_bv(1);
+			ignore_score[i][j] = 0;
+		}
+	}
+}
+
 // Function for game title
 
 void game_title(Ball *ball, Player *player, bool *playing, bool *title, int *mode, ALLEGRO_EVENT *ev, ALLEGRO_TIMER *timer, ALLEGRO_EVENT_QUEUE *eventqueue, ALLEGRO_FONT *font)
@@ -138,6 +166,8 @@ void game_title(Ball *ball, Player *player, bool *playing, bool *title, int *mod
 	}
 }
 
+// Function for game playing
+
 void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_brick_width], bool *playing, int *mode, bool *pause, ALLEGRO_EVENT *ev, ALLEGRO_TIMER *timer, ALLEGRO_EVENT_QUEUE *eventqueue, ALLEGRO_FONT *font, int ballw, int ballh, int brickw, int brickh, int playerw, int playerh, ALLEGRO_BITMAP *ball_fig, ALLEGRO_BITMAP *player_fig, ALLEGRO_BITMAP *brick_fig, ALLEGRO_DISPLAY *display)
 {
 	// If ball interacts with the brick, this brick should only once be added to players score
@@ -146,44 +176,24 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 
 	bool key[3] = { false, false, false }; // Check if keys are pressed 
 
-	while (*playing)
+	while (*playing) // When playing flag is true
 	{
-		if (!player->get_life())
+		if (!player->get_life()) // If player loses all lifes end screen appears 
 		{
-			al_start_timer(timer);
+			al_start_timer(timer); 
 			al_wait_for_event(eventqueue, ev);
-			if (ev->type == ALLEGRO_EVENT_TIMER)
+			if (ev->type == ALLEGRO_EVENT_TIMER) // Everything is being drawn during the timer event
 			{
+				// At end screen, player can choose to quit or restart the game
 				al_clear_to_color(al_map_rgb(255, 172, 78));
 				al_draw_textf(font, al_map_rgb(0, 120, 255), SCREEN_W / 2, SCREEN_H / 2 - 48, ALLEGRO_ALIGN_CENTRE, "SORRY, YOU LOSE! SCORE WAS: %i", player->get_score());
 				al_draw_textf(font, al_map_rgb(0, 0, 255), SCREEN_W / 2, SCREEN_H / 2 - 24, ALLEGRO_ALIGN_CENTRE, "(R)ESTART OR (Q)UIT");
 				al_flip_display();
 				if (key[KEY_R])
 				{
-					if (*mode == 1)
+					if (*mode == 1) // Restart game when default game mode was chosen 
 					{
-						if (key[KEY_LEFT])
-							key[KEY_LEFT] = false;
-
-						if (key[KEY_RIGHT])
-							key[KEY_RIGHT] = false;
-
-						*playing = true;
-						player->set_life(def_life);
-						player->set_score(0);
-						ball->set_dx(def_dx_dy);
-						ball->set_dy(def_dx_dy);
-						ball->set_x(SCREEN_W / 2 - ballw / 2);
-						ball->set_y(SCREEN_H / 2 - ballh);
-						player->set_x(SCREEN_W / 2 - playerw / 2);
-						player->set_y(SCREEN_H - playerh);
-						for (int i = 0; i < size_brick_height; i++) {
-							for (int j = 0; j < size_brick_width; j++)
-							{
-								brick[i][j].set_bv(1);
-								ignore_score[i][j] = 0;
-							}
-						}
+						game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 					}
 					else if (*mode == 2)
 					{
@@ -238,12 +248,13 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 					}
 				}
 			}
-			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) {
+			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) // Event when a key is pressed
+			{
 				switch (ev->keyboard.keycode) {
-				case ALLEGRO_KEY_Q:
+				case ALLEGRO_KEY_Q: // Q is used for quitting nad it sets playing flag to false
 					*playing = false;
 					break;
-				case ALLEGRO_KEY_R:
+				case ALLEGRO_KEY_R: // Restart key
 				{
 					key[KEY_R] = true;
 					break;
@@ -251,7 +262,7 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				}
 
 			}
-			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN)
+			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) // Check if restart key is released 
 			{
 				switch (ev->keyboard.keycode) {
 				case ALLEGRO_KEY_R:
@@ -260,23 +271,25 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				}
 			}
 		}
-		else
+		else // If not at end game screen, playing mode is on
 		{
-			al_clear_to_color(al_map_rgb(224, 224, 224));
+			al_clear_to_color(al_map_rgb(224, 224, 224)); // Setting allegro variables for drawing the playing mode 
 			al_wait_for_event(eventqueue, ev);
 			al_start_timer(timer);
 			if (ev->type == ALLEGRO_EVENT_TIMER)
 			{
-				if (!*pause)
+				if (!*pause) // When pause is pressed, game stops until pause is pressed again
 				{
-					ball->change_position();
-					ball->interaction_wall(SCREEN_W, SCREEN_H, player);
-					ball->interaction_player(player);
+					ball->change_position(); // Move the ball
+					ball->interaction_wall(SCREEN_W, SCREEN_H, player); // Check if the ball interacts with walls
+					ball->interaction_player(player); // Check if the ball interacts with player's paddle 
 
-					for (int i = 0; i < size_brick_height; i++) {
+					// Check if ball has interacted with each brick 
+					for (int i = 0; i < size_brick_height; i++) { 
 						for (int j = 0; j < size_brick_width; j++) {
 							if (brick[i][j].get_bv())
 							{
+								// If ball interacts with brick, this brick is then removed from play (brick_visible flag is false)
 								brick[i][j].set_bv(!ball->interaction_brick(&brick[i][j]));
 							}
 						}
@@ -286,49 +299,30 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 						for (int j = 0; j < size_brick_width; j++) {
 							if (!brick[i][j].get_bv() && !ignore_score[i][j])
 							{
+								// If brick was hit by the ball this adds to player's score and this brick is ignored from further scoring
 								player->inc_score(1);
-								//cout << player.get_score() << endl;
 								ignore_score[i][j] = 1;
 							}
 						}
 					}
 
-					if (key[KEY_LEFT]) {
+					if (key[KEY_LEFT]) // Move player left
+					{
 						player->change_position_left();
 					}
 
-					if (key[KEY_RIGHT]) {
+					if (key[KEY_RIGHT]) // Move player right
+					{
 						player->change_position_right(SCREEN_W);
 					}
 
-					if (key[KEY_R])
+					if (key[KEY_R]) // If R key is pressed during the game, game restarts
 					{
 						if (*pause)
 							*pause = false;
-						if (*mode == 1)
+						if (*mode == 1) // Restart game when default game mode was chosen
 						{
-							if (key[KEY_LEFT])
-								key[KEY_LEFT] = false;
-
-							if (key[KEY_RIGHT])
-								key[KEY_RIGHT] = false;
-
-							*playing = true;
-							player->set_life(def_life);
-							player->set_score(0);
-							ball->set_dx(def_dx_dy);
-							ball->set_dy(def_dx_dy);
-							ball->set_x(SCREEN_W / 2 - ballw / 2);
-							ball->set_y(SCREEN_H / 2 - ballh);
-							player->set_x(SCREEN_W / 2 - playerw / 2);
-							player->set_y(SCREEN_H - playerh);
-							for (int i = 0; i < size_brick_height; i++) {
-								for (int j = 0; j < size_brick_width; j++)
-								{
-									brick[i][j].set_bv(1);
-									ignore_score[i][j] = 0;
-								}
-							}
+							game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 						}
 						else if (*mode == 2)
 						{

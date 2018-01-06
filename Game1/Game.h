@@ -57,6 +57,13 @@ void game_hard(Ball *ball, Player *player, bool *playing, bool *title, int *mode
 
 void game_title(Ball *ball, Player *player, bool *playing, bool *title, int *mode, ALLEGRO_EVENT *ev, ALLEGRO_TIMER *timer, ALLEGRO_EVENT_QUEUE *eventqueue, ALLEGRO_FONT *font);
 
+// Restart game when default mode is chosen:
+
+void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width]);
+
 // Function for game playing:
 
 void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_brick_width], bool *playing, int *mode, bool *pause, ALLEGRO_EVENT *ev, ALLEGRO_TIMER *timer, ALLEGRO_EVENT_QUEUE *eventqueue, ALLEGRO_FONT *font, int ballw, int ballh, int brickw, int brickh, int playerw, int playerh, ALLEGRO_BITMAP *ball_fig, ALLEGRO_BITMAP *player_fig, ALLEGRO_BITMAP *brick_fig, ALLEGRO_DISPLAY *display);
+
+
+
