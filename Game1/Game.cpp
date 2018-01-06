@@ -370,7 +370,8 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 
 			}
 
-			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) {
+			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) // Check if buttons are pressed 
+			{
 				switch (ev->keyboard.keycode) {
 
 				case ALLEGRO_KEY_LEFT:
@@ -385,6 +386,8 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 					break;
 				case ALLEGRO_KEY_P:
 				{
+					// Pause state
+
 					if (!*pause)
 						*pause = true;
 					else
@@ -398,7 +401,8 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				}
 				}
 			}
-			else if (ev->type == ALLEGRO_EVENT_KEY_UP) {
+			else if (ev->type == ALLEGRO_EVENT_KEY_UP) // Check if buttons are released 
+			{
 				switch (ev->keyboard.keycode) {
 				case ALLEGRO_KEY_LEFT:
 					key[KEY_LEFT] = false;
@@ -413,23 +417,29 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				}
 			}
 
-			else if (ev->type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+			else if (ev->type == ALLEGRO_EVENT_DISPLAY_CLOSE) // Close the display
+			{
 				break;
 			}
+
+			// Draw all objects
 
 			al_draw_bitmap(player_fig, player->get_x(), player->get_y(), 0);
 			al_draw_bitmap(ball_fig, ball->get_x(), ball->get_y(), 0);
 			al_draw_textf(font, al_map_rgb(0, 0, 0), SCREEN_W / 2, 24, ALLEGRO_ALIGN_CENTRE, "SCORE: %i ", player->get_score());
 			al_draw_textf(font, al_map_rgb(0, 0, 0), SCREEN_W / 2, 0, ALLEGRO_ALIGN_CENTRE, "LIFE: %i ", player->get_life());
 
-			for (int i = 0; i < size_brick_height; i++) {
+			// Draw only visible bricks
+
+			for (int i = 0; i < size_brick_height; i++) 
+			{
 				for (int j = 0; j < size_brick_width; j++)
 				{
 					if (brick[i][j].get_bv())
 						al_draw_bitmap(brick_fig, brick[i][j].get_x(), brick[i][j].get_y(), 0);
 				}
 			}
-
+			// This is display flipping (see allegro tutorial)
 			al_flip_display();
 		}
 
@@ -437,9 +447,11 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 
 	al_flip_display();
 	if (*playing)
+		// Restting is shorter when playing is true
 		al_rest(0.1);
 	else
 		al_rest(0.8);
 
+	// This destroys the display when game ends
 	al_destroy_display(display);
 }
