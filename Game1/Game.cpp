@@ -82,11 +82,15 @@ void game_hard(Ball *ball, Player *player, bool *playing, bool *title, int *mode
 
 void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width])
 {
-	if (key[KEY_LEFT])
+	// Restart Left and Right keys states
+
+	if (key[KEY_LEFT]) 
 		key[KEY_LEFT] = false;
 
 	if (key[KEY_RIGHT])
 		key[KEY_RIGHT] = false;
+
+	// Resetting parameters 
 
 	*playing = true;
 	player->set_life(def_life);
@@ -105,6 +109,72 @@ void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Br
 		}
 	}
 }
+
+// Restart game when hard mode is chosen:
+
+void game_restart_hard(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width])
+{
+	// Restart Left and Right keys states
+
+	if (key[KEY_LEFT])
+		key[KEY_LEFT] = false;
+
+	if (key[KEY_RIGHT])
+		key[KEY_RIGHT] = false;
+
+	// Resetting parameters 
+
+	*playing = true;
+	player->set_life(hard_life);
+	player->set_score(0);
+	ball->set_dx(hard_dx_dy);
+	ball->set_dy(hard_dx_dy);
+	ball->set_x(SCREEN_W / 2 - ballw / 2);
+	ball->set_y(SCREEN_H / 2 - ballh);
+	player->set_x(SCREEN_W / 2 - playerw / 2);
+	player->set_dx(SCREEN_W / 80);
+	player->set_y(SCREEN_H - playerh);
+	for (int i = 0; i < size_brick_height; i++) {
+		for (int j = 0; j < size_brick_width; j++)
+		{
+			brick[i][j].set_bv(1);
+			ignore_score[i][j] = 0;
+		}
+	}
+}
+
+// Restart game when easy mode is chosen:
+
+void game_restart_easy(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width])
+{
+	// Restart Left and Right keys states
+
+	if (key[KEY_LEFT])
+		key[KEY_LEFT] = false;
+
+	if (key[KEY_RIGHT])
+		key[KEY_RIGHT] = false;
+
+	// Resetting parameters 
+
+	*playing = true;
+	player->set_life(easy_life);
+	player->set_score(0);
+	ball->set_dx(easy_dx_dy);
+	ball->set_dy(easy_dx_dy);
+	ball->set_x(SCREEN_W / 2 - ballw / 2);
+	ball->set_y(SCREEN_H / 2 - ballh);
+	player->set_x(SCREEN_W / 2 - playerw / 2);
+	player->set_y(SCREEN_H - playerh);
+	for (int i = 0; i < size_brick_height; i++) {
+		for (int j = 0; j < size_brick_width; j++)
+		{
+			brick[i][j].set_bv(1);
+			ignore_score[i][j] = 0;
+		}
+	}
+}
+
 
 // Function for game title
 
@@ -195,56 +265,13 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 					{
 						game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 					}
-					else if (*mode == 2)
+					else if (*mode == 2) // Restart game when hard game mode was chosen 
 					{
-						if (key[KEY_LEFT])
-							key[KEY_LEFT] = false;
-
-						if (key[KEY_RIGHT])
-							key[KEY_RIGHT] = false;
-
-						*playing = true;
-						player->set_life(hard_life);
-						player->set_score(0);
-						ball->set_dx(hard_dx_dy);
-						ball->set_dy(hard_dx_dy);
-						ball->set_x(SCREEN_W / 2 - ballw / 2);
-						ball->set_y(SCREEN_H / 2 - ballh);
-						player->set_x(SCREEN_W / 2 - playerw / 2);
-						player->set_dx(SCREEN_W / 80);
-						player->set_y(SCREEN_H - playerh);
-						for (int i = 0; i < size_brick_height; i++) {
-							for (int j = 0; j < size_brick_width; j++)
-							{
-								brick[i][j].set_bv(1);
-								ignore_score[i][j] = 0;
-							}
-						}
-					}
-					else if (*mode == 3)
+						game_restart_hard(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
+										}
+					else if (*mode == 3) // Restart game when easy game mode was chosen 
 					{
-						if (key[KEY_LEFT])
-							key[KEY_LEFT] = false;
-
-						if (key[KEY_RIGHT])
-							key[KEY_RIGHT] = false;
-
-						*playing = true;
-						player->set_life(easy_life);
-						player->set_score(0);
-						ball->set_dx(easy_life);
-						ball->set_dy(easy_dx_dy);
-						ball->set_x(SCREEN_W / 2 - ballw / 2);
-						ball->set_y(SCREEN_H / 2 - ballh);
-						player->set_x(SCREEN_W / 2 - playerw / 2);
-						player->set_y(SCREEN_H - playerh);
-						for (int i = 0; i < size_brick_height; i++) {
-							for (int j = 0; j < size_brick_width; j++)
-							{
-								brick[i][j].set_bv(1);
-								ignore_score[i][j] = 0;
-							}
-						}
+						game_restart_easy(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 					}
 				}
 			}
@@ -324,61 +351,20 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 						{
 							game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 						}
-						else if (*mode == 2)
+						else if (*mode == 2) // Restart game when hard game mode was chosen 
 						{
-							if (key[KEY_LEFT])
-								key[KEY_LEFT] = false;
-
-							if (key[KEY_RIGHT])
-								key[KEY_RIGHT] = false;
-
-							*playing = true;
-							player->set_life(hard_life);
-							player->set_score(0);
-							ball->set_dx(hard_dx_dy);
-							ball->set_dy(hard_dx_dy);
-							ball->set_x(SCREEN_W / 2 - ballw / 2);
-							ball->set_y(SCREEN_H / 2 - ballh);
-							player->set_x(SCREEN_W / 2 - playerw / 2);
-							player->set_dx(SCREEN_W / 80);
-							player->set_y(SCREEN_H - playerh);
-							for (int i = 0; i < size_brick_height; i++) {
-								for (int j = 0; j < size_brick_width; j++)
-								{
-									brick[i][j].set_bv(1);
-									ignore_score[i][j] = 0;
-								}
-							}
+							game_restart_hard(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 						}
-						else if (*mode == 3)
+						else if (*mode == 3) // Restart game when easy game mode was chosen 
 						{
-							if (key[KEY_LEFT])
-								key[KEY_LEFT] = false;
-
-							if (key[KEY_RIGHT])
-								key[KEY_RIGHT] = false;
-
-							*playing = true;
-							player->set_life(easy_life);
-							player->set_score(0);
-							ball->set_dx(easy_life);
-							ball->set_dy(easy_dx_dy);
-							ball->set_x(SCREEN_W / 2 - ballw / 2);
-							ball->set_y(SCREEN_H / 2 - ballh);
-							player->set_x(SCREEN_W / 2 - playerw / 2);
-							player->set_y(SCREEN_H - playerh);
-							for (int i = 0; i < size_brick_height; i++) {
-								for (int j = 0; j < size_brick_width; j++)
-								{
-									brick[i][j].set_bv(1);
-									ignore_score[i][j] = 0;
-								}
-							}
+							game_restart_easy(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
 						}
 					}
 				}
 				else
 				{
+					// Notification when pause is pressed
+
 					al_draw_textf(font, al_map_rgb(0, 120, 255), SCREEN_W / 2, SCREEN_H / 2 - 48, ALLEGRO_ALIGN_CENTRE, "PAUSED. PRESS P AGAIN TO CONTINUE.");
 				}
 
