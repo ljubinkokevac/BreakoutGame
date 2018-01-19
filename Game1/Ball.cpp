@@ -49,7 +49,8 @@ void Ball::change_position()
 }
 
 // Method which checks if the ball interacts with any wall:
-
+// describe paramters SW and SH
+// Can you find another solution that doesn't include PLayer param inmethod that decides if ball interacts with wall
 void Ball::interaction_wall(int SW, int SH, Player* player)
 {
 	// Check if the ball hits left side of the wall:
@@ -74,7 +75,7 @@ void Ball::interaction_wall(int SW, int SH, Player* player)
 
 		this->set_x(SW / 2 - this->get_bw() / 2);
 		this->set_y(SH / 2 - this->get_bh());
-		player->dec_life(1);
+		player->dec_life(1); // try to move it to other method maybe?
 	}
 
 	// Check if the ball hits upper part of the wall:
