@@ -87,11 +87,11 @@ void Ball::interaction_wall(int SW, int SH, Player* player)
 }
 
 // Check if the ball has interacted with the player's paddle:
-
+// method alsso changes ball direction 
 void Ball::interaction_player(Player* player){
 
 	// Check if ball hits top of the paddle:
-
+// too long line; ussualy there is some limit i.e. 120 chars per line to make code, review and debug easier
 	if (this->get_x() <= player->get_x() + player->get_pw() && this->get_x() + this->get_bw() >= player->get_x() && this->get_y() + this->get_bh() <= player->get_y() + player->get_ph() && this->get_y() + this->get_bh() >= player->get_y())
 	{
 		this->set_dy(this->get_dy()*-1);
@@ -130,7 +130,7 @@ int Ball::interaction_brick(Brick* brick)
 		dy_pos = 1;
 
 	//First: we check if the ball has hit the upper side of the brick
-
+// break if in couple of lines
 	if (dy_pos && this->get_x() + this->get_bw() >= brick->get_x() && this->get_x() <= brick->get_x() && this->get_y() + this->get_bh() >= brick->get_y() && this->get_y() <= brick->get_y())
 	{
 		//this->set_dy(this->get_dy()*-1);
