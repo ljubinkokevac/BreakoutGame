@@ -8,7 +8,7 @@ class Brick
 {
 public:
 	// Default constructor for class Brick
-
+// coding standards are different, but I think most agree that it is nicer to put { in next line when beginning a function
 	Brick::Brick() { this->x_pos = 0; this->y_pos = 0; this->brick_width = 0; this->brick_height = 0; this->brick_visible = 1; } 
 
 	// Parametrized constructor for class Brick
@@ -16,7 +16,7 @@ public:
 	Brick::Brick(int x, int y, int bw, int bh) { this->x_pos = x; this->y_pos = y; this->brick_width = bw; this->brick_height = bh; this->brick_visible = 1; } 
 
 	// Declaration of methods:
-
+// rename the methods, or fields, as we talked
 	void set_x(int x);
 	void set_y(int y);
 	void set_bw(int bw);
