@@ -13,11 +13,11 @@ class Ball
 {
 public:
 	// Default constructor for class Brick
-
+// long line
 	Ball::Ball() { this->x_pos = 0; this->y_pos = 0; this->diff_x = 5; this->diff_y = 5; this->ball_height = 32; this->ball_width = 32;}
 
 	// Parametrized constructor for class Ball
-
+// missaligned code
 		Ball::Ball(int x, int y, int dx, int dy, int bw, int bh)
 	{
 		this->x_pos = x; this->y_pos = y;
