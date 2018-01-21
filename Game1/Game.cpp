@@ -2,11 +2,12 @@
 #include "Game.h" 
 
 // Function for game initialization
-
+// put the paramters that your function returns at the end of param list
+// please refactor the param list in coupla of lines
 void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][size_brick_width], bool *playing, bool *title, bool *pause, int ballw, int ballh, int brickw, int brickh, int playerw, int playerh)
 {
 	// Initialize Ball object:
-
+	// consider adding initalize method to ball class which can be called inside the ball constructir as well
 	ball->set_x(SCREEN_W / 2 - ballw / 2);
 	ball->set_y(SCREEN_H / 2 - ballh);
 	ball->set_dx(def_dx_dy);
@@ -15,7 +16,7 @@ void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][
 	ball->set_bh(ballh);
 
 	// Initialize Brick matrix:
-
+// consider adding initalize method to brick class which can be called inside the brick constructir as well
 	for (int i = 0; i < size_brick_height; i++) {
 		for (int j = 0; j < size_brick_width; j++) {
 			brick[i][j].set_x(j*brickw);
@@ -26,7 +27,7 @@ void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][
 	}
 
 	// Initialize Player object:
-
+// consider adding initalize player to ball class which can be called inside the player constructir as well
 	player->set_x(SCREEN_W / 2 - playerw / 2);
 	player->set_y(SCREEN_H - playerh);
 	player->set_pw(playerw);
@@ -34,7 +35,7 @@ void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][
 	player->set_dx(SCREEN_W / 100);
 	player->set_life(def_life);
 
-	// Setting parameters befor entering title
+	// Setting parameters befor entering title screen
 
 	*playing = true;
 	*title = true;
@@ -42,7 +43,7 @@ void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][
 }
 
 // Function for easy game mode
-
+// merge the methods
 void game_easy(Ball *ball, Player *player, bool *playing, bool *title, int *mode)
 {
 	*mode = 3;
@@ -79,7 +80,7 @@ void game_hard(Ball *ball, Player *player, bool *playing, bool *title, int *mode
 }
 
 // Restart game when default mode is chosen:
-
+// what is ignore score matrix used for? 
 void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width])
 {
 	// Restart Left and Right keys states
@@ -203,6 +204,7 @@ void game_title(Ball *ball, Player *player, bool *playing, bool *title, int *mod
 		}
 		else if (ev->type == ALLEGRO_EVENT_KEY_DOWN)
 		{
+			// why are pause and restart not in the switch? at least you should have a default in this switch
 			switch (ev->keyboard.keycode) {
 			case ALLEGRO_KEY_Q:
 				// Quit choice:
@@ -261,6 +263,7 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				al_flip_display();
 				if (key[KEY_R])
 				{
+					// use enum for mode
 					if (*mode == 1) // Restart game when default game mode was chosen 
 					{
 						game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
