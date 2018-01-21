@@ -18,7 +18,7 @@
 #include <iostream>
 #include <conio.h>
 // Defintion of needed constants:
-
+// ypu probably don't need all the includes above in .h file
 const int SCREEN_W = 800;
 const int SCREEN_H = 700;
 const float FPS = 60.0;
@@ -30,10 +30,11 @@ const int hard_life = 3;
 const int hard_dx_dy = 10;
 const int easy_life = 7;
 const int easy_dx_dy = 3;
-
+// consts are ussualy capital case
 // Keys for moving player's paddle:
 
 enum MYKEYS {
+// extra tab
 	KEY_LEFT, KEY_RIGHT, KEY_R
 };
 
@@ -42,11 +43,11 @@ enum MYKEYS {
 void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][size_brick_width], bool *playing, bool *title, bool *pause, int ballw, int ballh, int brickw, int brickh, int playerw, int playerh);
 
 // Function for easy game mode
-
+// deos the function set mode to easy?
 void game_easy(Ball *ball, Player *player, bool *playing, bool *title, int *mode);
 
 // Function for default game mode
-
+// did you consider having one method which will take a mode as argument instead of three functions? 
 void game_default(Ball *ball, Player *player, bool *playing, bool *title, int *mode);
 
 // Function for hard game mode
@@ -54,11 +55,11 @@ void game_default(Ball *ball, Player *player, bool *playing, bool *title, int *m
 void game_hard(Ball *ball, Player *player, bool *playing, bool *title, int *mode);
 
 // Function for game title
-
+// what does this method do? why do you need all the allegro objects as input?
 void game_title(Ball *ball, Player *player, bool *playing, bool *title, int *mode, ALLEGRO_EVENT *ev, ALLEGRO_TIMER *timer, ALLEGRO_EVENT_QUEUE *eventqueue, ALLEGRO_FONT *font);
 
 // Restart game when default mode is chosen:
-
+// what about merging the three methods in one?
 void game_restart_def(bool key[3], bool *playing, Player *player, Ball *ball, Brick brick[size_brick_height][size_brick_width], int ballw, int ballh, int playerw, int playerh, int ignore_score[size_brick_height][size_brick_width]);
 
 // Restart game when hard mode is chosen:
