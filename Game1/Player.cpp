@@ -67,7 +67,10 @@ void Player::set_ph(int ph)
 void Player::change_position_left()
 {
 	this->set_x(this->get_x() - this->get_dx());
-	if (this->get_x() < 0) { this->set_x(0); };
+	if (this->get_x() < 0) 
+	{ 
+		this->set_x(0);
+	};
 }
 
 // Method fo changing position of player's paddle to the left:
@@ -75,7 +78,10 @@ void Player::change_position_left()
 void Player::change_position_right(int SW)
 {
 	this->set_x(this->get_x() + this->get_dx());
-	if (this->get_x() + this->get_pw() > SW) { this->set_x(SW - this->get_pw()); };
+	if (this->get_x() + this->get_pw() > SW) 
+	{ 
+		this->set_x(SW - this->get_pw()); 
+	};
 }
 
 // Methods for getting parameters:
