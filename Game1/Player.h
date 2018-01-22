@@ -10,7 +10,16 @@ class Player
 public:
 	// Default Constructor of the class Player:
 
-	Player::Player() { this->score = 0; this->life = 3; this->player_width = 64; this->player_height = 32; this->x_pos = 0; this->y_pos = 0; this->diff_x = 3; };
+	Player::Player() 
+	{  //extrapolate these magic numbers as consts
+		this->score = 0; 
+		this->life = 3; 
+		this->player_width = 64; 
+		this->player_height = 32; 
+		this->x_pos = 0; 
+		this->y_pos = 0; 
+		this->diff_x = 3; 
+	};
 
 	// Parametrized Constructor of the class Player:
 
