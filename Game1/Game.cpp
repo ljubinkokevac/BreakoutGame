@@ -289,6 +289,7 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				}
 
 			}
+			// this is te same condition as above, please refactor the code
 			else if (ev->type == ALLEGRO_EVENT_KEY_DOWN) // Check if restart key is released 
 			{
 				switch (ev->keyboard.keycode) {
@@ -347,6 +348,7 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 					{
 						if (*pause)
 							*pause = false;
+						// mode as enum, merge in one function
 						if (*mode == 1) // Restart game when default game mode was chosen
 						{
 							game_restart_def(key, playing, player, ball, brick, ballw, ballh, playerw, playerh, ignore_score);
@@ -387,7 +389,7 @@ void game_play(Ball *ball, Player *player, Brick brick[size_brick_height][size_b
 				case ALLEGRO_KEY_P:
 				{
 					// Pause state
-
+// wouldn't just *pause= true be enough?
 					if (!*pause)
 						*pause = true;
 					else
