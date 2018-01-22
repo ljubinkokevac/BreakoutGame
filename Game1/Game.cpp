@@ -36,7 +36,7 @@ void game_initialize(Ball *ball, Player *player, Brick brick[size_brick_height][
 	player->set_life(def_life);
 
 	// Setting parameters befor entering title screen
-
+	//
 	*playing = true;
 	*title = true;
 	*pause = false;
